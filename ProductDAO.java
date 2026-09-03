@@ -138,38 +138,69 @@ public class ProductDAO {
         return false;
     }
 
-    public boolean delete(int idno) {
-        String sql = "DELETE FROM product WHERE idno = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idno);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+// added
+public boolean delete(int idno) {
+    String deleteInventorySql = "DELETE FROM inventory WHERE product_id = ?";
+
+    String deleteProductSql = "DELETE FROM product WHERE idno = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement psInventory = conn.prepareStatement(deleteInventorySql);
+         PreparedStatement psProduct = conn.prepareStatement(deleteProductSql)) {
+
+        psInventory.setInt(1, idno);
+        psInventory.executeUpdate();
+
+        psProduct.setInt(1, idno);
+
+        return psProduct.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+    
+// added
+public boolean deleteMultiple(List<Integer> ids) {
+
+    if (ids == null || ids.isEmpty()) {
         return false;
     }
 
-    public boolean deleteMultiple(List<Integer> ids) {
-        if (ids == null || ids.isEmpty()) {
-            return false;
-        }
-        StringBuilder placeholders = new StringBuilder();
-        for (int i = 0; i < ids.size(); i++) {
-            placeholders.append(i == 0 ? "?" : ",?");
-        }
-        String sql = "DELETE FROM product WHERE idno IN (" + placeholders + ")";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (int i = 0; i < ids.size(); i++) {
-                ps.setInt(i + 1, ids.get(i));
-            }
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    StringBuilder placeholders = new StringBuilder();
+
+    for (int i = 0; i < ids.size(); i++) {
+        placeholders.append(i == 0 ? "?" : ",?");
     }
+
+    String deleteInventorySql =
+            "DELETE FROM inventory WHERE product_id IN (" + placeholders + ")";
+    // ADDED
+    String deleteProductSql =
+            "DELETE FROM product WHERE idno IN (" + placeholders + ")";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement psInventory = conn.prepareStatement(deleteInventorySql);
+         PreparedStatement psProduct = conn.prepareStatement(deleteProductSql)) {
+
+        for (int i = 0; i < ids.size(); i++) {
+            psInventory.setInt(i + 1, ids.get(i));
+        }
+        
+        // ADDED
+        for (int i = 0; i < ids.size(); i++) {
+            psProduct.setInt(i + 1, ids.get(i));
+        }
+
+        psInventory.executeUpdate();
+        return psProduct.executeUpdate() > 0; // ADDED
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
 
     /** SUM(price * stock) across every product - feeds the "Total Inventory Value" card. */
     public BigDecimal getTotalInventoryValue() {
