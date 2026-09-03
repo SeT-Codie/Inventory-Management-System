@@ -138,7 +138,7 @@ public class ProductDAO {
         return false;
     }
 
-// added
+// added .
 public boolean delete(int idno) {
     String deleteInventorySql = "DELETE FROM inventory WHERE product_id = ?";
 
