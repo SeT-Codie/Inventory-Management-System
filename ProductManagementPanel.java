@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import java.awt.Dimension; // ADDED PARA SA SAME SIZE NG BUTTON DIMENSION
+
 /**
  * Recreates the "Product Management" screen from the mockup: search bar,
  * Add/Update/Delete actions, and a paginated product table with per-row
@@ -108,6 +110,10 @@ public class ProductManagementPanel extends JPanel {
             UITheme.styleDangerButton(delete);
             delete.addActionListener(e -> deleteSelection());
 
+
+            // ADDED PARA DAMAY LAHAT NG BUTTON
+            setEqualToolbarButtonSize(refresh, add, update, delete);
+
             actions.add(add);
             actions.add(update);
             actions.add(delete);
@@ -117,6 +123,31 @@ public class ProductManagementPanel extends JPanel {
 
         return bar;
     }
+
+     // ADDED PARA SA PAGSET NG SIZES
+    private void setEqualToolbarButtonSize(JButton... buttons) {
+    int maxWidth = 0;
+    int maxHeight = 0;
+
+    for (JButton button : buttons) {
+        Dimension preferredSize = button.getPreferredSize();
+
+        maxWidth = Math.max(maxWidth, preferredSize.width);
+        maxHeight = Math.max(maxHeight, preferredSize.height);
+    }
+
+    // Add para extra horizontal space for longer text
+    // mahaba si "UPDATE PRODUCT" eh
+    maxWidth += 20;
+
+    Dimension commonSize = new Dimension(maxWidth, maxHeight);
+
+    for (JButton button : buttons) {
+        button.setPreferredSize(commonSize);
+        button.setMinimumSize(commonSize);
+        button.setMaximumSize(commonSize);
+    }
+}
 
     private JComponent buildTable() {
         table.setRowHeight(34);
