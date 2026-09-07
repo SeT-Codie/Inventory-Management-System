@@ -205,6 +205,9 @@ public class DashboardPanel extends JPanel {
         JButton generateReport = new JButton("Generate Detailed Report");
         UITheme.styleSecondaryButton(importExcel);
         UITheme.styleSecondaryButton(importPdf);
+        // Add code (same size din with other buttons)
+        importExcel.setPreferredSize(new Dimension(110, 35));// <-- eto
+        importPdf.setPreferredSize(new Dimension(90, 35));// <-- eto
         UITheme.stylePrimaryButton(generateReport);
 
         // TODO: wire these up to Apache POI (Excel) / PDFBox or iText (PDF)
