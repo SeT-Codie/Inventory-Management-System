@@ -50,6 +50,14 @@ public class ProductDialog extends JDialog {
         getContentPane().setBackground(UITheme.BG_APP);
         setLayout(new BorderLayout(0, 12));
 
+         // Added Code (Para sa header nung ADD PRODUCT PANEL)
+        JLabel header = new JLabel(editing == null ? "ADD PRODUCT" : "Update Product");
+        header.setForeground(UITheme.TEXT_PRIMARY);
+        header.setFont(UITheme.FONT_TITLE);
+        header.setBorder(new EmptyBorder(20, 25, 10, 20));
+
+        add(header, BorderLayout.NORTH);
+
         JPanel form = new JPanel(new GridBagLayout());
         form.setOpaque(false);
         form.setBorder(new EmptyBorder(20, 20, 10, 20));
@@ -71,6 +79,8 @@ public class ProductDialog extends JDialog {
         buttons.setOpaque(false);
         JButton cancel = new JButton("Cancel");
         UITheme.styleSecondaryButton(cancel);
+        // Added code (same size with add button)
+        cancel.setPreferredSize(new Dimension(72, 35));
         cancel.addActionListener(e -> dispose());
 
         JButton save = new JButton(editing == null ? "Add" : "Save");
