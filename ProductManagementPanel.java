@@ -86,7 +86,7 @@ public class ProductManagementPanel extends JPanel {
         });
         searchWrap.add(searchField, BorderLayout.CENTER);
 
-        JButton refresh = new JButton("\u21BB Refresh");
+        JButton refresh = new JButton("\u21BB REFRESH"); // <-- Capital REFRESH text
         UITheme.styleSecondaryButton(refresh);
         refresh.setToolTipText("Re-run the search and reload the latest data");
         refresh.addActionListener(e -> reload());
